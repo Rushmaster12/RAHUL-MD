@@ -1,108 +1,26 @@
-const {
-    isUrl,
-    System,
-    config,
-    getJson,
-    postJson,
-    isPrivate,
-    extractUrlsFromText 
-} = require("../lib/");
-  
-  
-System({
-      pattern: "wm",
-      fromMe: isPrivate,
-      desc: "wame generator",
-      type: "misc",
-},async (message, match) => {
-      if (!message.quoted) return message.reply("_*Reply to a user*_");
-      let sender = 'https://wa.me/' + (message.reply_message.sender || message.mention[0] || message.text).split('@')[0];
-      await message.reply(sender);
-});
 
-System({
-  pattern: 'ss ?(.*)',
-  fromMe: true,
-  desc: 'Takes a screenshot of a website',
-  type: 'misc',
-}, async (message, match) => {
-  let url = (await extractUrlsFromText(match || message.reply_message.text))[0];
-  if (!url) return await message.reply(`*Please provide a URL*`);
-  if (!isUrl(url)) return await message.reply(`*Please provide a valid URL*`);
-  await message.sendFromUrl(api + "tools/ssweb?q=" + url, { caption: `*Screenshot of ${url}*` });
-});
+/**
 
-  System({
-      pattern: "save", 
-      fromMe: true,
-      desc: "used to save messages", 
-      type: "misc",
-  }, async (message) => {
-     if (!message.quoted) return;
-     await message.client.forwardMessage(message.user.jid, message.reply_message.message);
-  });
+//══════════════════════════════════════════════════════════════════════════════\\
+//                                                                                            \\
+//          ██████╗  █████╗ ██╗  ██╗██╗   ██╗██╗         ███╗   ███╗██████╗            \\
+//          ██╔══██╗██╔══██╗██║  ██║██║   ██║██║         ████╗ ████║██╔══██╗          \\
+//          ██████╔╝███████║███████║██║   ██║██║         ██╔████╔██║██║  ██║          \\
+//          ██╔══██╗██╔══██║██╔══██║██║   ██║██║         ██║╚██╔╝██║██║  ██║          \\
+//          ██║  ██║██║  ██║██║  ██║╚██████╔╝███████╗    ██║ ╚═╝ ██║██████╔╝          \\
+//          ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝    ╚═╝     ╚═╝╚═════╝            \\
+//                                                                                             \\
+//═══════════════════════════════════════════════════════════════════════════════\\
 
+   * @Project_Name : Rahul-Md
+   * @author : Rahul Tech Ser
+   * @youtube : https://youtube.com/@rahultech009
+   * @description : Rahul-Md ,A Multi-functional whatsapp user bot.
+   * @version : V1
+*
+* 
+   * Created By Rahul Debnath.
+   * © 2025 Rahul-Md.
+*/
 
-  System({
-      pattern: 'whois ?(.*)',
-      fromMe: isPrivate,
-      desc: 'to find how is',
-      type: "info",
-  }, async (message, match) => {
-     let status;
-     let user = message.quoted ? message.reply_message.sender : match.replace(/[^0-9]/g, '')+'@s.whatsapp.net'
-     if (!user) return message.reply('_Reply to someone/mention_\n*Example:* . whois @user');
-     try { status = await message.client.fetchStatus(user); } catch { status = 'private'; }
-      let pp = await message.getPP(user);
-      const date = new Date(status.setAt);
-      const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' }; 
-      let wm = 'https://wa.me/' + user.split('@')[0];
-      const setAt = date.toLocaleString('en-US', options);
-      const NaMe = await message.store.getName(user);
-      await message.send({ url: pp }, { caption: `*Name :* ${NaMe}\n*About :* ${status.status}\n*About Set Date :* ${setAt}\n*whatsapp :* ${wm}`, quoted: message }, 'image');
-  });
-  
-  System({
-      pattern: 'tts ?(.*)',
-      fromMe: isPrivate,
-      desc: 'It converts text to sound.',
-      type: 'converter'
-  }, async (message, match) => {
-      if (!(match || message.reply_message.text)) return await message.reply('_Need Text!_\n_Example: tts Hello_\n_tts Hello {en}_');
-      let LANG = config.LANG.toLowerCase();
-      const lang = match.match("\\{([a-z]+)\\}");
-      if (lang) {
-        match = match.replace(lang[0], '');
-        LANG = lang[1];
-        if (message.reply_message.text) match = message.reply_message.text;
-      }
-      const response = await fetch(api + 'tools/tts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: match, lang: LANG }) });
-      if (response.ok) {
-          const data = await response.arrayBuffer();
-          await message.reply(Buffer.from(data), { mimetype: 'audio/ogg; codecs=opus', ptt: true }, "audio");
-      } else {
-          await message.reply("Error:", response.status, response.statusText);
-      }
-  });
-  
-  
-  System({
-      on: 'text',
-      fromMe: isPrivate,
-      dontAddCommandList: true,
-  },async (message) => {
-      if (message.quoted && (!message.isBot || !message.reply_message?.fromMe || !message.reply_message?.text)) return;
-      if (!message.body.includes('@') || !message.body.includes('‣')) return;
-      if (message.body.includes("1")) {
-          const text = message.body.split(" ");
-          const { result: tempmail } = await postJson(api + "tools/tempmail", { q: text[2] });
-      if (tempmail.length === 0) return message.reply("_*Mail box is empty*_");
-          const formattedResponse = `\n  *Temp Mail ✉️*\n\n${tempmail.map((mail, index) => `\n  • *From :* ${mail.from}\n  • *Subject :* ${mail.subject}\n  • *Date :* ${mail.date}\n  • *Id :* ${mail.id}\n  • *Mail Number:* ${index + 1}`).join("\n\n")}`;
-          await message.send(formattedResponse);
-      } else if (message.body.includes("2")) {
-         const { result: data } = await getJson(api + "tools/tempmail");
-         const user = await message.store.getName(message.sender);
-         const { result: tempmail } = await postJson(api + "tools/tempmail", { q: data });
-         await message.send(`*_${data}_*\n\n*Dear user, this is your temp mail*\n\n*User: ${user}*\n*Mail received: ${tempmail.length}*\n\n\`\`\`1 ‣\`\`\` *Check mail*\n\`\`\`2 ‣\`\`\` *Next mail*\n\n*_Send a Number as reply_*`);
-      }
-  });
+const _0x3bb982=_0x9ee2;function _0x4158(){const _0x3ef6b9=['sendFromUrl','*\x0a*Mail\x20received:\x20','tools/ssweb?q=','statusText','private','client','includes','LANG','181265mTKSZZ','*Screenshot\x20of\x20','save','tools/tempmail','status','\x0a\x20\x20•\x20*From\x20:*\x20','store','2FYVIkg','subject','to\x20find\x20how\x20is','It\x20converts\x20text\x20to\x20sound.','\x0a\x20\x20•\x20*Subject\x20:*\x20','body','7095868zYrMYW','11547gPGwwo','Takes\x20a\x20screenshot\x20of\x20a\x20website','reply','\x5c{([a-z]+)\x5c}','*\x0a\x0a```1\x20‣```\x20*Check\x20mail*\x0a```2\x20‣```\x20*Next\x20mail*\x0a\x0a*_Send\x20a\x20Number\x20as\x20reply_*','42cXadRT','tools/tts','misc','\x0a*About\x20:*\x20','../lib/','_Reply\x20to\x20someone/mention_\x0a*Example:*\x20.\x20whois\x20@user','audio','mention','send','\x0a\x20\x20•\x20*Id\x20:*\x20','857907ewAcTo','match','*Please\x20provide\x20a\x20URL*','split','16990seWdjw','Error:','setAt','_*Reply\x20to\x20a\x20user*_','12rwyMRy','join','tts\x20?(.*)','sender','application/json','image','audio/ogg;\x20codecs=opus','replace','used\x20to\x20save\x20messages','whois\x20?(.*)','\x0a\x20\x20*Temp\x20Mail\x20✉️*\x0a\x0a','\x0a\x20\x20•\x20*Date\x20:*\x20','from','length','isBot','ss\x20?(.*)','672hzFNiO','POST','_*\x0a\x0a*Dear\x20user,\x20this\x20is\x20your\x20temp\x20mail*\x0a\x0a*User:\x20','\x0a*About\x20Set\x20Date\x20:*\x20','info','en-US','getName','148260dKBGFR','reply_message','quoted','long','68065gaPGAx','numeric','*Please\x20provide\x20a\x20valid\x20URL*','24plBMMy','_Need\x20Text!_\x0a_Example:\x20tts\x20Hello_\x0a_tts\x20Hello\x20{en}_','map','getPP','arrayBuffer','2563HsWKzK','fetchStatus','toLowerCase','*Name\x20:*\x20','forwardMessage','text','toLocaleString'];_0x4158=function(){return _0x3ef6b9;};return _0x4158();}(function(_0x3c5419,_0x10abef){const _0x597f4e=_0x9ee2,_0x51a68e=_0x3c5419();while(!![]){try{const _0x70c12b=parseInt(_0x597f4e(0x16c))/0x1*(parseInt(_0x597f4e(0x18e))/0x2)+-parseInt(_0x597f4e(0x14d))/0x3+-parseInt(_0x597f4e(0x155))/0x4*(parseInt(_0x597f4e(0x170))/0x5)+-parseInt(_0x597f4e(0x19a))/0x6*(parseInt(_0x597f4e(0x187))/0x7)+parseInt(_0x597f4e(0x165))/0x8*(-parseInt(_0x597f4e(0x195))/0x9)+-parseInt(_0x597f4e(0x151))/0xa*(parseInt(_0x597f4e(0x178))/0xb)+-parseInt(_0x597f4e(0x173))/0xc*(-parseInt(_0x597f4e(0x194))/0xd);if(_0x70c12b===_0x10abef)break;else _0x51a68e['push'](_0x51a68e['shift']());}catch(_0x1afce5){_0x51a68e['push'](_0x51a68e['shift']());}}}(_0x4158,0x37b7c));function _0x9ee2(_0x38531a,_0x17f78b){const _0x415868=_0x4158();return _0x9ee2=function(_0x9ee26f,_0x5e4f52){_0x9ee26f=_0x9ee26f-0x145;let _0x496dbb=_0x415868[_0x9ee26f];return _0x496dbb;},_0x9ee2(_0x38531a,_0x17f78b);}const {isUrl,System,config,getJson,postJson,isPrivate,extractUrlsFromText}=require(_0x3bb982(0x147));System({'pattern':'wm','fromMe':isPrivate,'desc':'wame\x20generator','type':_0x3bb982(0x145)},async(_0x34d0f8,_0x2e0d62)=>{const _0x5472e5=_0x3bb982;if(!_0x34d0f8[_0x5472e5(0x16e)])return _0x34d0f8[_0x5472e5(0x197)](_0x5472e5(0x154));let _0x34c59d='https://wa.me/'+(_0x34d0f8[_0x5472e5(0x16d)][_0x5472e5(0x158)]||_0x34d0f8[_0x5472e5(0x14a)][0x0]||_0x34d0f8['text'])[_0x5472e5(0x150)]('@')[0x0];await _0x34d0f8[_0x5472e5(0x197)](_0x34c59d);}),System({'pattern':_0x3bb982(0x164),'fromMe':!![],'desc':_0x3bb982(0x196),'type':_0x3bb982(0x145)},async(_0x50caac,_0x13f11d)=>{const _0x15ab48=_0x3bb982;let _0xd46d16=(await extractUrlsFromText(_0x13f11d||_0x50caac[_0x15ab48(0x16d)][_0x15ab48(0x17d)]))[0x0];if(!_0xd46d16)return await _0x50caac[_0x15ab48(0x197)](_0x15ab48(0x14f));if(!isUrl(_0xd46d16))return await _0x50caac[_0x15ab48(0x197)](_0x15ab48(0x172));await _0x50caac[_0x15ab48(0x17f)](api+_0x15ab48(0x181)+_0xd46d16,{'caption':_0x15ab48(0x188)+_0xd46d16+'*'});}),System({'pattern':_0x3bb982(0x189),'fromMe':!![],'desc':_0x3bb982(0x15d),'type':_0x3bb982(0x145)},async _0x45a737=>{const _0x2b6fbc=_0x3bb982;if(!_0x45a737[_0x2b6fbc(0x16e)])return;await _0x45a737[_0x2b6fbc(0x184)][_0x2b6fbc(0x17c)](_0x45a737['user']['jid'],_0x45a737[_0x2b6fbc(0x16d)]['message']);}),System({'pattern':_0x3bb982(0x15e),'fromMe':isPrivate,'desc':_0x3bb982(0x190),'type':_0x3bb982(0x169)},async(_0x3f3ca7,_0x1085b8)=>{const _0x421e34=_0x3bb982;let _0x3b4387,_0x428507=_0x3f3ca7[_0x421e34(0x16e)]?_0x3f3ca7[_0x421e34(0x16d)][_0x421e34(0x158)]:_0x1085b8[_0x421e34(0x15c)](/[^0-9]/g,'')+'@s.whatsapp.net';if(!_0x428507)return _0x3f3ca7['reply'](_0x421e34(0x148));try{_0x3b4387=await _0x3f3ca7[_0x421e34(0x184)][_0x421e34(0x179)](_0x428507);}catch{_0x3b4387=_0x421e34(0x183);}let _0x5b1263=await _0x3f3ca7[_0x421e34(0x176)](_0x428507);const _0x4257ca=new Date(_0x3b4387[_0x421e34(0x153)]),_0x579308={'year':_0x421e34(0x171),'month':_0x421e34(0x16f),'day':_0x421e34(0x171),'hour':_0x421e34(0x171),'minute':_0x421e34(0x171),'second':_0x421e34(0x171)};let _0x4e6fff='https://wa.me/'+_0x428507[_0x421e34(0x150)]('@')[0x0];const _0x403ab6=_0x4257ca[_0x421e34(0x17e)](_0x421e34(0x16a),_0x579308),_0x15e42a=await _0x3f3ca7[_0x421e34(0x18d)][_0x421e34(0x16b)](_0x428507);await _0x3f3ca7[_0x421e34(0x14b)]({'url':_0x5b1263},{'caption':_0x421e34(0x17b)+_0x15e42a+_0x421e34(0x146)+_0x3b4387['status']+_0x421e34(0x168)+_0x403ab6+'\x0a*whatsapp\x20:*\x20'+_0x4e6fff,'quoted':_0x3f3ca7},_0x421e34(0x15a));}),System({'pattern':_0x3bb982(0x157),'fromMe':isPrivate,'desc':_0x3bb982(0x191),'type':'converter'},async(_0x5d61fa,_0x2c8183)=>{const _0x387ae6=_0x3bb982;if(!(_0x2c8183||_0x5d61fa[_0x387ae6(0x16d)][_0x387ae6(0x17d)]))return await _0x5d61fa['reply'](_0x387ae6(0x174));let _0x23b2c2=config[_0x387ae6(0x186)][_0x387ae6(0x17a)]();const _0x31b8dc=_0x2c8183[_0x387ae6(0x14e)](_0x387ae6(0x198));if(_0x31b8dc){_0x2c8183=_0x2c8183[_0x387ae6(0x15c)](_0x31b8dc[0x0],''),_0x23b2c2=_0x31b8dc[0x1];if(_0x5d61fa[_0x387ae6(0x16d)][_0x387ae6(0x17d)])_0x2c8183=_0x5d61fa[_0x387ae6(0x16d)][_0x387ae6(0x17d)];}const _0x46503e=await fetch(api+_0x387ae6(0x19b),{'method':_0x387ae6(0x166),'headers':{'Content-Type':_0x387ae6(0x159)},'body':JSON['stringify']({'text':_0x2c8183,'lang':_0x23b2c2})});if(_0x46503e['ok']){const _0x4ec9cc=await _0x46503e[_0x387ae6(0x177)]();await _0x5d61fa['reply'](Buffer[_0x387ae6(0x161)](_0x4ec9cc),{'mimetype':_0x387ae6(0x15b),'ptt':!![]},_0x387ae6(0x149));}else await _0x5d61fa[_0x387ae6(0x197)](_0x387ae6(0x152),_0x46503e[_0x387ae6(0x18b)],_0x46503e[_0x387ae6(0x182)]);}),System({'on':_0x3bb982(0x17d),'fromMe':isPrivate,'dontAddCommandList':!![]},async _0x52765b=>{const _0x183dbb=_0x3bb982;if(_0x52765b[_0x183dbb(0x16e)]&&(!_0x52765b[_0x183dbb(0x163)]||!_0x52765b['reply_message']?.['fromMe']||!_0x52765b[_0x183dbb(0x16d)]?.[_0x183dbb(0x17d)]))return;if(!_0x52765b[_0x183dbb(0x193)][_0x183dbb(0x185)]('@')||!_0x52765b['body'][_0x183dbb(0x185)]('‣'))return;if(_0x52765b[_0x183dbb(0x193)]['includes']('1')){const _0x1a9565=_0x52765b[_0x183dbb(0x193)][_0x183dbb(0x150)]('\x20'),{result:_0x3349b4}=await postJson(api+_0x183dbb(0x18a),{'q':_0x1a9565[0x2]});if(_0x3349b4[_0x183dbb(0x162)]===0x0)return _0x52765b[_0x183dbb(0x197)]('_*Mail\x20box\x20is\x20empty*_');const _0x12f16a=_0x183dbb(0x15f)+_0x3349b4[_0x183dbb(0x175)]((_0x5e8c0d,_0x41b11e)=>_0x183dbb(0x18c)+_0x5e8c0d['from']+_0x183dbb(0x192)+_0x5e8c0d[_0x183dbb(0x18f)]+_0x183dbb(0x160)+_0x5e8c0d['date']+_0x183dbb(0x14c)+_0x5e8c0d['id']+'\x0a\x20\x20•\x20*Mail\x20Number:*\x20'+(_0x41b11e+0x1))[_0x183dbb(0x156)]('\x0a\x0a');await _0x52765b[_0x183dbb(0x14b)](_0x12f16a);}else{if(_0x52765b[_0x183dbb(0x193)][_0x183dbb(0x185)]('2')){const {result:_0x58e48d}=await getJson(api+'tools/tempmail'),_0x5b83e4=await _0x52765b[_0x183dbb(0x18d)][_0x183dbb(0x16b)](_0x52765b[_0x183dbb(0x158)]),{result:_0x4ec116}=await postJson(api+_0x183dbb(0x18a),{'q':_0x58e48d});await _0x52765b['send']('*_'+_0x58e48d+_0x183dbb(0x167)+_0x5b83e4+_0x183dbb(0x180)+_0x4ec116[_0x183dbb(0x162)]+_0x183dbb(0x199));}}});
