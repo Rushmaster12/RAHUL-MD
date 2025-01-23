@@ -1,69 +1,26 @@
-const { System, isPrivate, TechNews } = require("../lib/");
 
-System({
-  pattern: 'technews (.*)',
-  fromMe: isPrivate,
-  desc: 'Get tech news',
-  type: 'news',
-}, async (message, match) => {
-  const techNews = new TechNews();
-  const topic = match.toLowerCase();
-  const availableTopics = ['gadgets', 'technology', 'laptops', 'reviews', 'science', 'gallery', 'videos', 'mobiles', 'techook'];
-  
-  if (availableTopics.includes(topic)) {
-    const result = await techNews.news(topic);
-    let newsItem;
-    
-    if (result.gadgets) {
-      const gadgets = result.gadgets;
-      const randomIndex = Math.floor(Math.random() * gadgets.length);
-      newsItem = gadgets[randomIndex];
-    } else if (result.technology) {
-      const technology = result.technology;
-      const randomIndex = Math.floor(Math.random() * technology.length);
-      newsItem = technology[randomIndex];
-    } else if (result.videos) {
-      const videos = result.videos;
-      const randomIndex = Math.floor(Math.random() * videos.length);
-      newsItem = videos[randomIndex];
-    } else if (result.laptops) {
-      const laptops = result.laptops;
-      const randomIndex = Math.floor(Math.random() * laptops.length);
-      newsItem = laptops[randomIndex];
-    } else if (result.reviews) {
-      const reviews = result.reviews;
-      const randomIndex = Math.floor(Math.random() * reviews.length);
-      newsItem = reviews[randomIndex];
-    } else if (result.science) {
-      const science = result.science;
-      const randomIndex = Math.floor(Math.random() * science.length);
-      newsItem = science[randomIndex];
-    } else if (result.gallery) {
-      const gallery = result.gallery;
-      const randomIndex = Math.floor(Math.random() * gallery.length);
-      newsItem = gallery[randomIndex];
-    } else if (result.mobiles) {
-      const mobiles = result.mobiles;
-      const randomIndex = Math.floor(Math.random() * mobiles.length);
-      newsItem = mobiles[randomIndex];
-    } else if (result.techook) {
-      const techook = result.techook;
-      const randomIndex = Math.floor(Math.random() * techook.length);
-      newsItem = techook[randomIndex];
-    } else {
-      newsItem = result;
-    }
-    
-    if (newsItem) {
-      await message.send(`*TITLE:* ${newsItem.title}\n*LINK:* ${newsItem.link}`, {
-        image: newsItem.image,
-        footer: "*RAHUL-MD*",
-        title: "*TOP TECH NEWS*"
-      });
-    } else {
-      await message.reply(`*No news found for* ${topic}`);
-    }
-  } else {
-    await message.reply(`*Available topics:* ${availableTopics.join(', ')}. *Please specify a valid topic, e.g., technews gadgets*`);
-  }
-});
+/**
+
+//══════════════════════════════════════════════════════════════════════════════\\
+//                                                                                            \\
+//          ██████╗  █████╗ ██╗  ██╗██╗   ██╗██╗         ███╗   ███╗██████╗            \\
+//          ██╔══██╗██╔══██╗██║  ██║██║   ██║██║         ████╗ ████║██╔══██╗          \\
+//          ██████╔╝███████║███████║██║   ██║██║         ██╔████╔██║██║  ██║          \\
+//          ██╔══██╗██╔══██║██╔══██║██║   ██║██║         ██║╚██╔╝██║██║  ██║          \\
+//          ██║  ██║██║  ██║██║  ██║╚██████╔╝███████╗    ██║ ╚═╝ ██║██████╔╝          \\
+//          ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝    ╚═╝     ╚═╝╚═════╝            \\
+//                                                                                             \\
+//═══════════════════════════════════════════════════════════════════════════════\\
+
+   * @Project_Name : Rahul-Md
+   * @author : Rahul Tech Ser
+   * @youtube : https://youtube.com/@rahultech009
+   * @description : Rahul-Md ,A Multi-functional whatsapp user bot.
+   * @version : V1
+*
+* 
+   * Created By Rahul Debnath.
+   * © 2025 Rahul-Md.
+*/
+
+const _0x36f9c7=_0x1c96;function _0x1c96(_0x157954,_0x336ebd){const _0x41978a=_0x4197();return _0x1c96=function(_0x1c9605,_0x142795){_0x1c9605=_0x1c9605-0x7c;let _0x23c9c7=_0x41978a[_0x1c9605];return _0x23c9c7;},_0x1c96(_0x157954,_0x336ebd);}(function(_0x131d33,_0x492bcc){const _0x310c89=_0x1c96,_0x3512d8=_0x131d33();while(!![]){try{const _0x4fd5f1=-parseInt(_0x310c89(0x8e))/0x1+-parseInt(_0x310c89(0xa2))/0x2+-parseInt(_0x310c89(0x84))/0x3*(parseInt(_0x310c89(0x85))/0x4)+-parseInt(_0x310c89(0x98))/0x5+parseInt(_0x310c89(0x86))/0x6+parseInt(_0x310c89(0x96))/0x7*(-parseInt(_0x310c89(0x88))/0x8)+parseInt(_0x310c89(0x7c))/0x9*(parseInt(_0x310c89(0x7e))/0xa);if(_0x4fd5f1===_0x492bcc)break;else _0x3512d8['push'](_0x3512d8['shift']());}catch(_0x44ca07){_0x3512d8['push'](_0x3512d8['shift']());}}}(_0x4197,0x40807));const {System,isPrivate,TechNews}=require(_0x36f9c7(0x82));function _0x4197(){const _0x116ca8=['174591AjdNEt','news','370zyvWRi','gadgets','laptops','random','../lib/','length','737031YQnzWV','4oIfSjS','3109836KBfrsE','\x0a*LINK:*\x20','8HKuVAy','*TOP\x20TECH\x20NEWS*','technews\x20(.*)','send','link','mobiles','67597RhxbZq','technology','join','title','techook','toLowerCase','reply','image','2088254BKpFNs','.\x20*Please\x20specify\x20a\x20valid\x20topic,\x20e.g.,\x20technews\x20gadgets*','625525IHAOjQ','gallery','*No\x20news\x20found\x20for*\x20','videos','includes','reviews','floor','Get\x20tech\x20news','science','*TITLE:*\x20','470338EKMttP'];_0x4197=function(){return _0x116ca8;};return _0x4197();}System({'pattern':_0x36f9c7(0x8a),'fromMe':isPrivate,'desc':_0x36f9c7(0x9f),'type':_0x36f9c7(0x7d)},async(_0x2b836a,_0x311321)=>{const _0x2d4e6a=_0x36f9c7,_0x3ced0c=new TechNews(),_0x1d55dc=_0x311321[_0x2d4e6a(0x93)](),_0x2b2966=[_0x2d4e6a(0x7f),_0x2d4e6a(0x8f),'laptops',_0x2d4e6a(0x9d),_0x2d4e6a(0xa0),_0x2d4e6a(0x99),'videos','mobiles',_0x2d4e6a(0x92)];if(_0x2b2966[_0x2d4e6a(0x9c)](_0x1d55dc)){const _0x49c312=await _0x3ced0c[_0x2d4e6a(0x7d)](_0x1d55dc);let _0x690861;if(_0x49c312[_0x2d4e6a(0x7f)]){const _0x42064e=_0x49c312[_0x2d4e6a(0x7f)],_0x40ea80=Math[_0x2d4e6a(0x9e)](Math['random']()*_0x42064e[_0x2d4e6a(0x83)]);_0x690861=_0x42064e[_0x40ea80];}else{if(_0x49c312[_0x2d4e6a(0x8f)]){const _0x55709d=_0x49c312[_0x2d4e6a(0x8f)],_0x3e780b=Math[_0x2d4e6a(0x9e)](Math[_0x2d4e6a(0x81)]()*_0x55709d[_0x2d4e6a(0x83)]);_0x690861=_0x55709d[_0x3e780b];}else{if(_0x49c312['videos']){const _0x1dc166=_0x49c312[_0x2d4e6a(0x9b)],_0x10ed11=Math['floor'](Math[_0x2d4e6a(0x81)]()*_0x1dc166[_0x2d4e6a(0x83)]);_0x690861=_0x1dc166[_0x10ed11];}else{if(_0x49c312[_0x2d4e6a(0x80)]){const _0x224d5e=_0x49c312['laptops'],_0x4e90b5=Math[_0x2d4e6a(0x9e)](Math['random']()*_0x224d5e[_0x2d4e6a(0x83)]);_0x690861=_0x224d5e[_0x4e90b5];}else{if(_0x49c312[_0x2d4e6a(0x9d)]){const _0x513f4f=_0x49c312['reviews'],_0x2d1da3=Math[_0x2d4e6a(0x9e)](Math[_0x2d4e6a(0x81)]()*_0x513f4f[_0x2d4e6a(0x83)]);_0x690861=_0x513f4f[_0x2d1da3];}else{if(_0x49c312[_0x2d4e6a(0xa0)]){const _0x2585c1=_0x49c312[_0x2d4e6a(0xa0)],_0x199879=Math[_0x2d4e6a(0x9e)](Math['random']()*_0x2585c1[_0x2d4e6a(0x83)]);_0x690861=_0x2585c1[_0x199879];}else{if(_0x49c312[_0x2d4e6a(0x99)]){const _0x2069c5=_0x49c312['gallery'],_0x3cb913=Math['floor'](Math[_0x2d4e6a(0x81)]()*_0x2069c5[_0x2d4e6a(0x83)]);_0x690861=_0x2069c5[_0x3cb913];}else{if(_0x49c312[_0x2d4e6a(0x8d)]){const _0x2a9e20=_0x49c312[_0x2d4e6a(0x8d)],_0x5a31d7=Math[_0x2d4e6a(0x9e)](Math[_0x2d4e6a(0x81)]()*_0x2a9e20['length']);_0x690861=_0x2a9e20[_0x5a31d7];}else{if(_0x49c312[_0x2d4e6a(0x92)]){const _0x33a1e7=_0x49c312['techook'],_0x5de956=Math[_0x2d4e6a(0x9e)](Math['random']()*_0x33a1e7[_0x2d4e6a(0x83)]);_0x690861=_0x33a1e7[_0x5de956];}else _0x690861=_0x49c312;}}}}}}}}_0x690861?await _0x2b836a[_0x2d4e6a(0x8b)](_0x2d4e6a(0xa1)+_0x690861[_0x2d4e6a(0x91)]+_0x2d4e6a(0x87)+_0x690861[_0x2d4e6a(0x8c)],{'image':_0x690861[_0x2d4e6a(0x95)],'footer':'*RAHUL-MD*','title':_0x2d4e6a(0x89)}):await _0x2b836a[_0x2d4e6a(0x94)](_0x2d4e6a(0x9a)+_0x1d55dc);}else await _0x2b836a[_0x2d4e6a(0x94)]('*Available\x20topics:*\x20'+_0x2b2966[_0x2d4e6a(0x90)](',\x20')+_0x2d4e6a(0x97));});
